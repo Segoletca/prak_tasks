@@ -1,6 +1,6 @@
 from random import randint
 
-shadow_int = randint(1, 100)
+shadow_int: int = randint(1, 100)
 print('Угадайте число от 1 до 100')
 
 while True:
@@ -12,3 +12,7 @@ while True:
         print('Ваше число меньше того, что загадано')
     else:
         print('Ваше число больше того, что загадано')
+
+
+def fun():
+    pass

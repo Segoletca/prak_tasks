@@ -1,5 +1,14 @@
 from prettytable import PrettyTable
 
+from guesser import fun
+
+d = 20
+
+
+def func() -> None:
+    fun()
+
+
 table = PrettyTable()
 
 table.field_names = ['Name', 'Age', 'City']
@@ -9,4 +18,4 @@ table.add_row(['Тоня', 6, 'Минск'])
 table.add_row(['Толя', 8, 'Санкт-Петербург'])
 table.add_row(['Лера', 5, 'Краснодар'])
 
-print(table) 
+print(table)
