@@ -1,7 +1,7 @@
 training_names = {
-    "SWM": "Плавание",
-    "RUN": "Бег",
-    "WLK": "Спортивная ходьба",
+    "SWM": "Swimming",
+    "RUN": "Running",
+    "WLK": "SportsWalking",
 }
 
 
@@ -28,7 +28,7 @@ class InfoMessage:
             f"Длительность: {self.duration:.3f} ч.;\n"
             f"Дистанция: {self.distance:.3f} км;\n"
             f"Ср. скорость: {self.speed:.3f} км/ч;\n"
-            f"Потрачено ккал: {self.calories:.3f} ккал.\n"
+            f"Потрачено ккал: {self.calories:.3f}.\n"
         )
 
 
@@ -129,6 +129,7 @@ class SportsWalking(LandTraining):
     COEFFICIENTS = (0.035, 0.029)
 
     def get_spent_calories(self):
+        # self.calories = ((0.035 * self.weight + (self.speed_m_sec**2 / self.height) * 0.029 * self.weight) * self.duration_min)
         self.calories = (
             self.COEFFICIENTS[0] * self.weight
             + (self.speed_m_sec**2 / self.height) * self.COEFFICIENTS[1] * self.weight
@@ -151,6 +152,7 @@ class Swimming(Training):
 
     def get_spent_calories(self):
         self.get_mean_speed()
+
         self.calories = (self.speed + 1.1) * 2 * self.weight * self.duration
 
 
@@ -168,7 +170,7 @@ def read_package(workout_type: str, data: list[int]) -> Training | str:
         training = wlk
 
     if workout_type.upper() == "SWM":
-        swm = Swimming(data[0], data[1], data[2], data[3], data[4])
+        swm = Swimming(*data)
         swm.get_spent_calories()
         training = swm
 
