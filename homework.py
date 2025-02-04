@@ -104,21 +104,16 @@ class Running(LandTraining):
         self.CALORIES_MEAN_SPEED_MULTIPLIER = 18
         self.CALORIES_MEAN_SPEED_SHIFT = 1.79
 
-    # def get_spent_calories(self):
-    #     self.calories = (
-    #         (18 * self.speed + 1.79) * self.weight / self.M_IN_KM * self.duration_min
-    #     )
-
     def get_spent_calories(self):
         self.calories = (
             (
                 self.CALORIES_MEAN_SPEED_MULTIPLIER
                 * self.speed
-                * self.CALORIES_MEAN_SPEED_SHIFT
+                + self.CALORIES_MEAN_SPEED_SHIFT
             )
             * self.weight
             / self.M_IN_KM
-            * self.duration
+            * self.duration_min
         )
 
 
@@ -136,7 +131,6 @@ class SportsWalking(LandTraining):
         self.COEFFICIENTS = (0.035, 0.029)
 
     def get_spent_calories(self):
-        # self.calories = ((0.035 * self.weight + (self.speed_m_sec**2 / self.height) * 0.029 * self.weight) * self.duration_min)
         self.calories = (
             self.COEFFICIENTS[0] * self.weight
             + (self.speed_m_sec**2 / self.height) * self.COEFFICIENTS[1] * self.weight
