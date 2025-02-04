@@ -50,6 +50,7 @@ class Training:
         self.weight = weight
         self.M_IN_KM = 1000
         self.LEN_STEP = None
+        self.TYPE = "Training"
 
     def get_distance(self) -> float:
         """Получить дистанцию в км."""
@@ -70,17 +71,15 @@ class Training:
         """Получить количество затраченных калорий."""
         pass
 
-    def show_training_info(self, workout_type: str) -> InfoMessage:
+    def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
-        message = InfoMessage(
-            workout_type,
+        return InfoMessage(
+            self.TYPE,
             self.duration,
             self.distance,
             self.speed,
             self.calories,
-        ).get_message()
-
-        print(message)
+        )
 
 
 class LandTraining(Training):
@@ -97,12 +96,18 @@ class LandTraining(Training):
 
 class Running(LandTraining):
     """Тренировка: бег."""
+    def __init__(self, action, duration, weight):
+        super().__init__(action, duration, weight)
 
-    CALORIES_MEAN_SPEED_MULTIPLIER = 18
-    CALORIES_MEAN_SPEED_SHIFT = 1.79
+        self.TYPE = "RUN"
+        self.CALORIES_MEAN_SPEED_MULTIPLIER = 18
+        self.CALORIES_MEAN_SPEED_SHIFT = 1.79
 
     def get_spent_calories(self):
-        self.calories = (18 * self.speed + 1.79) * self.weight / self.M_IN_KM * self.duration_min
+        self.calories = (
+            (18 * self.speed + 1.79) * self.weight / self.M_IN_KM * self.duration_min
+        )
+
     # def get_spent_calories(self):
     #     self.calories = (
     #         (
@@ -126,7 +131,8 @@ class SportsWalking(LandTraining):
         super().get_mean_speed_m_sec()
         super().get_duration_min()
 
-    COEFFICIENTS = (0.035, 0.029)
+        self.TYPE = "WLK"
+        self.COEFFICIENTS = (0.035, 0.029)
 
     def get_spent_calories(self):
         # self.calories = ((0.035 * self.weight + (self.speed_m_sec**2 / self.height) * 0.029 * self.weight) * self.duration_min)
@@ -144,6 +150,7 @@ class Swimming(Training):
         self.length_pool = length_pool
         self.count_pool = count_pool
         self.LEN_STEP = 1.38
+        self.TYPE = "SWM"
 
         super().get_distance()
 
@@ -177,9 +184,11 @@ def read_package(workout_type: str, data: list[int]) -> Training | str:
     return training
 
 
-def main(training: Training | str, workout_type: str) -> None:
+# , workout_type: str
+def main(training: Training | str) -> None:
     """Главная функция."""
-    training.show_training_info(workout_type)
+    info: InfoMessage = training.show_training_info()
+    print(info.get_message())
 
 
 if __name__ == "__main__":
@@ -191,4 +200,4 @@ if __name__ == "__main__":
 
     for workout_type, data in packages:
         training = read_package(workout_type, data)
-        main(training, workout_type)
+        main(training)
